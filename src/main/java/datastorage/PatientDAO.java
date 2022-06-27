@@ -28,13 +28,13 @@ public class PatientDAO extends DAOimp<Patient> {
      */
     @Override
     protected String getCreateStatementString(Patient patient) {
-        return String.format("INSERT INTO patient (firstname, surname, dateOfBirth, carelevel, roomnumber, assets) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')",
-                patient.getFirstName(), patient.getSurname(), patient.getDateOfBirth(), patient.getCareLevel(), patient.getRoomnumber(), patient.getAssets());
+        return String.format("INSERT INTO patient (firstname, surname, dateOfBirth, carelevel, roomnumber,block,entrydate) VALUES ('%s', '%s', '%s', '%s', '%s',default,'%s')",
+                patient.getFirstName(), patient.getSurname(), patient.getDateOfBirth(), patient.getCareLevel(), patient.getRoomnumber(),DateConverter.getDatenow());
     }
 
     /**
      * generates a <code>select</code>-Statement for a given key
-     * @param key for which a specific SELECTis to be created
+     * @param key for which a specific SELECT is to be created
      * @return <code>String</code> with the generated SQL.
      */
     @Override
@@ -43,8 +43,9 @@ public class PatientDAO extends DAOimp<Patient> {
     }
 
     /**
-     * maps a <code>ResultSet</code> to a <code>Patient</code>
-     * @param result ResultSet with a single row. Columns will be mapped to a patient-object.
+     * maps a <code>ResultSet</code> to a <code>User</code>
+     * checks if the data is too old or locked
+     * @param result ResultSet with a single row. Columns will be mapped to a user-object.
      * @return patient with the data from the resultSet.
      */
     @Override
@@ -53,8 +54,15 @@ public class PatientDAO extends DAOimp<Patient> {
         LocalDate date = DateConverter.convertStringToLocalDate(result.getString(4));
         p = new Patient(result.getInt(1), result.getString(2),
                 result.getString(3), date, result.getString(5),
-                result.getString(6), result.getString(7));
-        return p;
+                result.getString(6),result.getBoolean(7),result.getString(8));
+        if(DateConverter.add10(p.getEntryDate())>=DateConverter.getDatenowINT()){
+            deleteById(p.getPid());
+        }
+        if(p.getBlock()==false) {
+            return p;
+        }else{
+            return null;
+        }
     }
 
     /**
@@ -79,7 +87,7 @@ public class PatientDAO extends DAOimp<Patient> {
             LocalDate date = DateConverter.convertStringToLocalDate(result.getString(4));
             p = new Patient(result.getInt(1), result.getString(2),
                     result.getString(3), date,
-                    result.getString(5), result.getString(6), result.getString(7));
+                    result.getString(5), result.getString(6),result.getBoolean(7),result.getString(8));
             list.add(p);
         }
         return list;
@@ -93,8 +101,8 @@ public class PatientDAO extends DAOimp<Patient> {
     @Override
     protected String getUpdateStatementString(Patient patient) {
         return String.format("UPDATE patient SET firstname = '%s', surname = '%s', dateOfBirth = '%s', carelevel = '%s', " +
-                "roomnumber = '%s', assets = '%s' WHERE pid = %d", patient.getFirstName(), patient.getSurname(), patient.getDateOfBirth(),
-                patient.getCareLevel(), patient.getRoomnumber(), patient.getAssets(), patient.getPid());
+                "roomnumber = '%s',  WHERE pid = %d", patient.getFirstName(), patient.getSurname(), patient.getDateOfBirth(),
+                patient.getCareLevel(), patient.getRoomnumber(), patient.getPid());
     }
 
     /**
@@ -105,5 +113,14 @@ public class PatientDAO extends DAOimp<Patient> {
     @Override
     protected String getDeleteStatementString(long key) {
         return String.format("Delete FROM patient WHERE pid=%d", key);
+    }
+    /**
+     * generates a <code>delete</code>-Statement for a given key
+     * @param key for which a specific DELETE is to be created
+     * @return <code>String</code> with the generated SQL.
+     */
+    @Override
+    protected String getBlockStatementString(long key) {
+        return String.format("Update patient SET block = true WHERE pid=%d", key);
     }
 }
