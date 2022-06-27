@@ -38,6 +38,8 @@ public class AllPatientController {
     @FXML
     Button btnDelete;
     @FXML
+    Button btnBlock;
+    @FXML
     Button btnAdd;
     @FXML
     TextField txtSurname;
@@ -127,7 +129,7 @@ public class AllPatientController {
      * @param event event including the value that a user entered into the cell
      */
     @FXML
-    public void handleOnEditRoomnumber(TableColumn.CellEditEvent<Patient, String> event){
+    public void handleOnEditRoomnumber(TableColumn.CellEditEvent<Patient, String> event) {
         event.getRowValue().setRoomnumber(event.getNewValue());
         doUpdate(event);
     }
@@ -171,6 +173,21 @@ public class AllPatientController {
         try {
             tDao.deleteByPid(selectedItem.getPid());
             dao.deleteById(selectedItem.getPid());
+            this.tableView.getItems().remove(selectedItem);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * handles a block-click-event. Calls the block methods in the {@link PatientDAO} and {@link TreatmentDAO}
+     */
+    @FXML
+    public void handleBlockRow() {
+        TreatmentDAO tDao = DAOFactory.getDAOFactory().createTreatmentDAO();
+        Patient selectedItem = this.tableView.getSelectionModel().getSelectedItem();
+        try {
+            tDao.blockById(selectedItem.getPid());
+            dao.blockById(selectedItem.getPid());
             this.tableView.getItems().remove(selectedItem);
         } catch (SQLException e) {
             e.printStackTrace();

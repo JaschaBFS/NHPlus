@@ -14,6 +14,8 @@ public class Patient extends Person {
     private String careLevel;
     private String roomnumber;
     private List<Treatment> allTreatments = new ArrayList<Treatment>();
+    private boolean block;
+    private String entryDate;
 
     /**
      * constructs a patient from the given params.
@@ -23,6 +25,10 @@ public class Patient extends Person {
      * @param careLevel
      * @param roomnumber
      */
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of 0b9fcf0 (Revert "Endpush des LF05-Projekts")
     public Patient(String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber) {
         super(firstName, surname);
         this.dateOfBirth = dateOfBirth;
@@ -39,12 +45,21 @@ public class Patient extends Person {
      * @param careLevel
      * @param roomnumber
      */
+<<<<<<< HEAD
     public Patient(long pid, String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber) {
+=======
+    public Patient(long pid, String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber,boolean block,String entryDate) {
+>>>>>>> parent of 0b9fcf0 (Revert "Endpush des LF05-Projekts")
         super(firstName, surname);
         this.pid = pid;
         this.dateOfBirth = dateOfBirth;
         this.careLevel = careLevel;
         this.roomnumber = roomnumber;
+<<<<<<< HEAD
+=======
+        this.block = block;
+        this.entryDate= entryDate;
+>>>>>>> parent of 0b9fcf0 (Revert "Endpush des LF05-Projekts")
     }
 
     /**
@@ -129,5 +144,11 @@ public class Patient extends Person {
                 "\nCarelevel: " + this.careLevel +
                 "\nRoomnumber: " + this.roomnumber +
                 "\n";
+    }
+    public boolean getBlock(){
+        return this.block;
+    }
+    public String getEntryDate(){
+        return this.entryDate;
     }
 }
