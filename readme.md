@@ -50,3 +50,18 @@ Wird das Open JDK verwendet, werden JavaFX-Abhängigkeiten nicht importiert. Die
 - Benutzername: SA
 - Passwort: SA
 - Bitte nicht in die Datenbank schauen, während die Applikation läuft. Das sorgt leider für einen Lock, der erst wieder verschwindet, wenn IntelliJ neugestartet wird!
+
+## Hinweise zur Anmeldung
+
+- Benutzername: Admin
+- Passwort: admin
+
+## Testprotokoll
+
+- Userstory "Vermögensstand" TF1-3 erfolgreich
+- Userstory "Accountsystem" TF1 & TF4 erfolgreich, TF 2-3 nicht erfolgreich
+- Userstory "Accountsystemhierarchie" TF1-5 nicht erfolgreich
+- Userstory "Pflegekraftliste" TF 1-5 erfolgreich
+- Userstory "Automatische Löschung nach 10 Jahren" TF1 erfolgreich, TF2-3 nicht erfolgreich
+- Userstory "Kein Löschen ohne Admin-Berechtigung" TF1-4 nicht erfolgreich
+- Userstory "Sperren-Button" TF1-4 erfolgreich
